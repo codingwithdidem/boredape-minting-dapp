@@ -17,6 +17,7 @@ export default function Mint() {
   const [isPublicSale, setIsPublicSale] = useState(false)
   const [isPreSale, setIsPreSale] = useState(false)
 
+  const [status, setStatus] = useState(null)
   const [mintAmount, setMintAmount] = useState(1)
   const [onboard, setOnboard] = useState(null)
   const [walletAddress, setWalletAddress] = useState('')
@@ -201,11 +202,17 @@ export default function Mint() {
             </div>
 
             {/* Status */}
-            <div className="border border-brand-pink-400 rounded-md text-start h-full px-4 py-4 w-full mx-auto mt-8 md:mt-4">
-              <p className="flex flex-col space-y-2 text-white text-sm md:text-base break-words ...">
-                Smth went wrong
-              </p>
-            </div>
+            {status && (
+              <div
+                className={`border ${
+                  status.success ? 'border-green-500' : 'border-brand-pink-400 '
+                } rounded-md text-start h-full px-4 py-4 w-full mx-auto mt-8 md:mt-4"`}
+              >
+                <p className="flex flex-col space-y-2 text-white text-sm md:text-base break-words ...">
+                  Smth went wrong
+                </p>
+              </div>
+            )}
 
             {/* Contract Address */}
             <div className="border-t border-gray-800 flex flex-col items-center mt-10 py-2 w-full">
