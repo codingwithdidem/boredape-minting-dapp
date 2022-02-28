@@ -1,3 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Coiny&family=Open+Sans:wght@400;500;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-family: "Open Sans", sans-serif;
+  --clr-purple: #9b5de5;
+  --clr-pink: #f15bb5;
+  --clr-yellow: #fee440;
+  --clr-blue: #00bbf9;
+  --clr-green: #00f5d4;
+  --clr-selection-bg: #cb3d92;
+  --clr-selection-text: #f4f0f0;
+  --clr-background: #06070a;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-family);
+  background: var(--clr-background);
+}
+
+::selection {
+  background: var(--clr-selection-bg);
+  color: var(--clr-selection-text);
+}
