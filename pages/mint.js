@@ -1,10 +1,43 @@
 import { useState, useEffect } from 'react'
 import { initOnboard } from '../utils/onboard'
 import { config } from '../dapp.config'
+import {
+  getTotalMinted,
+  getMaxSupply,
+  isPausedState,
+  isPublicSaleState,
+  isPreSaleState
+} from '../utils/interact'
 
 export default function Mint() {
+  const [maxSupply, setMaxSupply] = useState(0)
+  const [totalMinted, setTotalMinted] = useState(0)
+  const [maxMintAmount, setMaxMintAmount] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [isPublicSale, setIsPublicSale] = useState(false)
+  const [isPreSale, setIsPreSale] = useState(false)
+
+  const [mintAmount, setMintAmount] = useState(1)
   const [onboard, setOnboard] = useState(null)
   const [walletAddress, setWalletAddress] = useState('')
+
+  useEffect(() => {
+    const init = async () => {
+      setMaxSupply(await getMaxSupply())
+      setTotalMinted(await getTotalMinted())
+
+      setPaused(await isPausedState())
+      setIsPublicSale(await isPublicSaleState())
+      const isPreSale = await isPreSaleState()
+      setIsPreSale(isPreSale)
+
+      setMaxMintAmount(
+        isPreSale ? config.presaleMaxMintAmount : config.maxMintAmount
+      )
+    }
+
+    init()
+  }, [])
 
   useEffect(() => {
     const onboardData = initOnboard({
@@ -38,6 +71,18 @@ export default function Mint() {
       window.location.reload(true)
     }
   }
+
+  const incrementMintAmount = () => {
+    if (mintAmount < maxMintAmount) {
+      setMintAmount(mintAmount + 1)
+    }
+  }
+
+  const decrementMintAmount = () => {
+    if (mintAmount > 1) {
+      setMintAmount(mintAmount - 1)
+    }
+  }
   return (
     <div className="min-h-screen h-full w-full overflow-hidden flex flex-col items-center justify-center bg-brand-background ">
       <div className="relative w-full h-full flex flex-col items-center justify-center">
@@ -49,7 +94,7 @@ export default function Mint() {
         <div className="flex flex-col items-center justify-center h-full w-full px-2 md:px-10">
           <div className="z-1 md:max-w-3xl w-full bg-gray-900/90 filter backdrop-blur-sm py-4 rounded-md px-2 md:px-10 flex flex-col items-center">
             <h1 className="font-coiny uppercase font-bold text-3xl md:text-4xl bg-gradient-to-br  from-brand-green to-brand-blue bg-clip-text text-transparent mt-3">
-              Pre-Sale
+              {paused ? 'Paused' : isPreSale ? 'Pre-Sale' : 'Public Sale'}
             </h1>
             <h3 className="text-sm text-pink-200 tracking-widest">
               {walletAddress
@@ -61,7 +106,8 @@ export default function Mint() {
               <div className="relative w-full">
                 <div className="font-coiny z-10 absolute top-2 left-2 opacity-80 filter backdrop-blur-lg text-base px-4 py-2 bg-black border border-brand-purple rounded-md flex items-center justify-center text-white font-semibold">
                   <p>
-                    <span className="text-brand-pink">0</span> / 2222
+                    <span className="text-brand-pink">{totalMinted}</span> /{' '}
+                    {maxSupply}
                   </p>
                 </div>
 
@@ -73,7 +119,10 @@ export default function Mint() {
 
               <div className="flex flex-col items-center w-full px-4 mt-16 md:mt-0">
                 <div className="font-coiny flex items-center justify-between w-full">
-                  <button className="w-14 h-10 md:w-16 md:h-12 flex items-center justify-center text-brand-background hover:shadow-lg bg-gray-300 font-bold rounded-md">
+                  <button
+                    className="w-14 h-10 md:w-16 md:h-12 flex items-center justify-center text-brand-background hover:shadow-lg bg-gray-300 font-bold rounded-md"
+                    onClick={incrementMintAmount}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 md:h-8 md:w-8"
@@ -91,10 +140,13 @@ export default function Mint() {
                   </button>
 
                   <p className="flex items-center justify-center flex-1 grow text-center font-bold text-brand-pink text-3xl md:text-4xl">
-                    1
+                    {mintAmount}
                   </p>
 
-                  <button className="w-14 h-10 md:w-16 md:h-12 flex items-center justify-center text-brand-background hover:shadow-lg bg-gray-300 font-bold rounded-md">
+                  <button
+                    className="w-14 h-10 md:w-16 md:h-12 flex items-center justify-center text-brand-background hover:shadow-lg bg-gray-300 font-bold rounded-md"
+                    onClick={decrementMintAmount}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 md:h-8 md:w-8"
@@ -113,7 +165,7 @@ export default function Mint() {
                 </div>
 
                 <p className="text-sm text-pink-200 tracking-widest mt-3">
-                  Max Mint Amount: 5
+                  Max Mint Amount: {maxMintAmount}
                 </p>
 
                 <div className="border-t border-b py-4 mt-16 w-full">
@@ -121,7 +173,12 @@ export default function Mint() {
                     <p>Total</p>
 
                     <div className="flex items-center space-x-3">
-                      <p>0.01 ETH</p>
+                      <p>
+                        {Number.parseFloat(config.price * mintAmount).toFixed(
+                          2
+                        )}{' '}
+                        ETH
+                      </p>{' '}
                       <span className="text-gray-400">+ GAS</span>
                     </div>
                   </div>
