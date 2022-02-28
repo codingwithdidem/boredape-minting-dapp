@@ -6,7 +6,9 @@ import {
   getMaxSupply,
   isPausedState,
   isPublicSaleState,
-  isPreSaleState
+  isPreSaleState,
+  presaleMint,
+  publicMint
 } from '../utils/interact'
 
 export default function Mint() {
@@ -19,6 +21,7 @@ export default function Mint() {
 
   const [status, setStatus] = useState(null)
   const [mintAmount, setMintAmount] = useState(1)
+  const [isMinting, setIsMinting] = useState(false)
   const [onboard, setOnboard] = useState(null)
   const [walletAddress, setWalletAddress] = useState('')
 
@@ -84,6 +87,32 @@ export default function Mint() {
       setMintAmount(mintAmount - 1)
     }
   }
+
+  const presaleMintHandler = async () => {
+    setIsMinting(true)
+
+    const { success, status } = await presaleMint(mintAmount)
+
+    setStatus({
+      success,
+      message: status
+    })
+
+    setIsMinting(false)
+  }
+  const publicMintHandler = async () => {
+    setIsMinting(true)
+
+    const { success, status } = await publicMint(mintAmount)
+
+    setStatus({
+      success,
+      message: status
+    })
+
+    setIsMinting(false)
+  }
+
   return (
     <div className="min-h-screen h-full w-full overflow-hidden flex flex-col items-center justify-center bg-brand-background ">
       <div className="relative w-full h-full flex flex-col items-center justify-center">
@@ -187,8 +216,16 @@ export default function Mint() {
 
                 {/* Mint Button && Connect Wallet Button */}
                 {walletAddress ? (
-                  <button className="font-coiny mt-12 w-full bg-gradient-to-br from-brand-purple to-brand-pink shadow-lg px-6 py-3 rounded-md text-2xl text-white hover:shadow-pink-400/50 mx-4 tracking-wide uppercase">
-                    Mint
+                  <button
+                    className={` ${
+                      paused || isMinting
+                        ? 'bg-gray-900 cursor-not-allowed'
+                        : 'bg-gradient-to-br from-brand-purple to-brand-pink shadow-lg hover:shadow-pink-400/50'
+                    } font-coiny mt-12 w-full px-6 py-3 rounded-md text-2xl text-white  mx-4 tracking-wide uppercase`}
+                    disabled={paused || isMinting}
+                    onClick={isPreSale ? presaleMintHandler : publicMintHandler}
+                  >
+                    {isMinting ? 'Minting...' : 'Mint'}
                   </button>
                 ) : (
                   <button
@@ -209,7 +246,7 @@ export default function Mint() {
                 } rounded-md text-start h-full px-4 py-4 w-full mx-auto mt-8 md:mt-4"`}
               >
                 <p className="flex flex-col space-y-2 text-white text-sm md:text-base break-words ...">
-                  Smth went wrong
+                  {status.message}
                 </p>
               </div>
             )}
