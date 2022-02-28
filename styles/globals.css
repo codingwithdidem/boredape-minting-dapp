@@ -1,11 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Coiny&family=Open+Sans:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Coiny&family=Open+Sans:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-family: "Open Sans", sans-serif;
+  --font-family: 'Open Sans', sans-serif;
+  --clr-light: #f0e9e9;
   --clr-purple: #9b5de5;
   --clr-pink: #f15bb5;
   --clr-yellow: #fee440;
