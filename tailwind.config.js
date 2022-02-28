@@ -18,6 +18,9 @@ module.exports = {
         'brand-green': 'var(--clr-green)',
         'brand-light': 'var(--clr-light)',
         'brand-background': 'var(--clr-background)'
+      },
+      animation: {
+        'pulse-slow': 'pulse 10s linear infinite'
       }
     }
   },
