@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { initOnboard } from '../utils/onboard'
+import { config } from '../dapp.config'
 
 export default function Mint() {
   const [onboard, setOnboard] = useState(null)
@@ -155,13 +156,11 @@ export default function Mint() {
                 Contract Address
               </h3>
               <a
-                href="https://etherscan.io/address/0x933572D5F83B00A998102b7bf1a99c0f197E685B"
+                href={`https://rinkeby.etherscan.io/address/${config.contractAddress}#readContract`}
                 target="_blank"
                 className="text-gray-400 mt-4"
               >
-                <span className="break-all ...">
-                  20493820498230498320948232049382049823049832094823
-                </span>
+                <span className="break-all ...">{config.contractAddress}</span>
               </a>
             </div>
           </div>
