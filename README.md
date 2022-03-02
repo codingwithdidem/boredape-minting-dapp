@@ -23,7 +23,7 @@ Use the default **BoredApe Smart Contract:**
 
 ## Screenshots
 
-![App Screenshot](https://raw.githubusercontent.com/codingwithdidem/boredape-minting-dapp/main/public/ss.png)
+![App Screenshot](https://raw.githubusercontent.com/codingwithdidem/boredape-minting-dapp/main/public/images/ss.png)
 
 ## Support
 
