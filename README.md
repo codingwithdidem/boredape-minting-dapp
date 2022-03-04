@@ -9,10 +9,12 @@ You can use **the default BoredApe smart contract** and play with it or you can 
 Use the default **BoredApe Smart Contract:**
 
 ```bash
-  git clone https://github.com/codingwithdidem/boredape-minting-dapp.git
+  Download the zip file and unzip it
+
   cd boredape-nft-minting-dapp
-  npm install
-  npm run dev
+  npm install            # Download packages
+  npx hardhat compile    # Compile solidity contract into /artifacts
+  npm run dev            # Run the dev server
 ```
 
 ## Tech Stack
