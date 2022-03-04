@@ -23,10 +23,6 @@ Use the default **BoredApe Smart Contract:**
 
 **Server:** Alchemy, NextJS, Hardhat
 
-## Screenshots
-
-![App Screenshot](https://raw.githubusercontent.com/codingwithdidem/boredape-minting-dapp/main/public/images/ss.png)
-
 ## Support
 
 For support, email codingwithdidem@gmail.com
