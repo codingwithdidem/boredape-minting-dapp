@@ -121,13 +121,13 @@ export default function Home() {
               </h2>
 
               <p className="mt-6 text-lg">
-                BoredApes are a collection of 5,555 burning hot NFTs living in
+                {`BoredApes are a collection of 5,555 burning hot NFTs living in
                 the core of the blockchain. Each individual BoredApes is
                 carefully curated from over 150 traits, along with some
                 incredibly rare 1/1s that have traits that can't be found from
                 any other BoredApes. Our vision is to create an amazing project
                 that will shed light, joy, love, and creativity! Burn on,
-                BoredApes!
+                BoredApes!`}
               </p>
             </div>
           </div>
