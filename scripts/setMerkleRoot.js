@@ -18,7 +18,7 @@ async function main() {
   const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true })
   const root = merkleTree.getRoot()
 
-  await nftContract.setWhitelistRoot(root)
+  await nftContract.setMerkleRoot(root)
 
   console.log('Whitelist root set to:', root)
 }
