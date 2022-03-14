@@ -1,3 +1,8 @@
+/**
+ *  This script will calculate the constructor arguments for BoredApe.sol and deploy it.
+ *  After deploying, you can access the contract on etherscan.io with the deployed contract address.
+ */
+
 const hre = require('hardhat')
 const { MerkleTree } = require('merkletreejs')
 const keccak256 = require('keccak256')

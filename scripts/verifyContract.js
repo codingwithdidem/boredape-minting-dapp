@@ -1,3 +1,8 @@
+/**
+ *  This script will calculate the constructor arguments for the `verify` function and call it.
+ *  You can use this script to verify the contract on etherscan.io.
+ */
+
 require('@nomiclabs/hardhat-etherscan')
 const hre = require('hardhat')
 const { MerkleTree } = require('merkletreejs')
@@ -15,7 +20,7 @@ async function main() {
   const root = merkleTree.getRoot()
 
   await hre.run('verify:verify', {
-    address: '0x0312e42e4b55823a3C41769DC0B07F382dECc247',
+    address: '0x0312e42e4b55823a3C41769DC0B07F382dECc247', // Deployed contract address
     constructorArguments: [BASE_URI, root, proxyRegistryAddressRinkeby]
   })
 }
