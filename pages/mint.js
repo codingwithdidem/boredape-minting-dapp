@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { initOnboard } from '../utils/onboard'
+import { useConnectWallet, useSetChain, useWallets } from '@web3-onboard/react'
 import { config } from '../dapp.config'
 import {
   getTotalMinted,
@@ -12,6 +13,10 @@ import {
 } from '../utils/interact'
 
 export default function Mint() {
+  const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+  const [{ chains, connectedChain, settingChain }, setChain] = useSetChain()
+  const connectedWallets = useWallets()
+
   const [maxSupply, setMaxSupply] = useState(0)
   const [totalMinted, setTotalMinted] = useState(0)
   const [maxMintAmount, setMaxMintAmount] = useState(0)
@@ -23,7 +28,43 @@ export default function Mint() {
   const [mintAmount, setMintAmount] = useState(1)
   const [isMinting, setIsMinting] = useState(false)
   const [onboard, setOnboard] = useState(null)
-  const [walletAddress, setWalletAddress] = useState('')
+
+  useEffect(() => {
+    setOnboard(initOnboard)
+  }, [])
+
+  useEffect(() => {
+    if (!connectedWallets.length) return
+
+    const connectedWalletsLabelArray = connectedWallets.map(
+      ({ label }) => label
+    )
+    window.localStorage.setItem(
+      'connectedWallets',
+      JSON.stringify(connectedWalletsLabelArray)
+    )
+  }, [connectedWallets])
+
+  useEffect(() => {
+    if (!onboard) return
+
+    const previouslyConnectedWallets = JSON.parse(
+      window.localStorage.getItem('connectedWallets')
+    )
+
+    if (previouslyConnectedWallets?.length) {
+      async function setWalletFromLocalStorage() {
+        await connect({
+          autoSelect: {
+            label: previouslyConnectedWallets[0],
+            disableModals: true
+          }
+        })
+      }
+
+      setWalletFromLocalStorage()
+    }
+  }, [onboard, connect])
 
   useEffect(() => {
     const init = async () => {
@@ -42,39 +83,6 @@ export default function Mint() {
 
     init()
   }, [])
-
-  useEffect(() => {
-    const onboardData = initOnboard({
-      address: (address) => setWalletAddress(address ? address : ''),
-      wallet: (wallet) => {
-        if (wallet.provider) {
-          window.localStorage.setItem('selectedWallet', wallet.name)
-        } else {
-          window.localStorage.removeItem('selectedWallet')
-        }
-      }
-    })
-
-    setOnboard(onboardData)
-  }, [])
-
-  const previouslySelectedWallet =
-    typeof window !== 'undefined' &&
-    window.localStorage.getItem('selectedWallet')
-
-  useEffect(() => {
-    if (previouslySelectedWallet !== null && onboard) {
-      onboard.walletSelect(previouslySelectedWallet)
-    }
-  }, [onboard, previouslySelectedWallet])
-
-  const connectWalletHandler = async () => {
-    const walletSelected = await onboard.walletSelect()
-    if (walletSelected) {
-      await onboard.walletCheck()
-      window.location.reload(true)
-    }
-  }
 
   const incrementMintAmount = () => {
     if (mintAmount < maxMintAmount) {
@@ -122,13 +130,27 @@ export default function Mint() {
         />
 
         <div className="flex flex-col items-center justify-center h-full w-full px-2 md:px-10">
-          <div className="z-1 md:max-w-3xl w-full bg-gray-900/90 filter backdrop-blur-sm py-4 rounded-md px-2 md:px-10 flex flex-col items-center">
+          <div className="relative z-1 md:max-w-3xl w-full bg-gray-900/90 filter backdrop-blur-sm py-4 rounded-md px-2 md:px-10 flex flex-col items-center">
+            {wallet && (
+              <button
+                className="absolute right-4 bg-indigo-600 transition duration-200 ease-in-out font-chalk border-2 border-[rgba(0,0,0,1)] shadow-[0px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none px-4 py-2 rounded-md text-sm text-white tracking-wide uppercase"
+                onClick={() =>
+                  disconnect({
+                    label: wallet.label
+                  })
+                }
+              >
+                Disconnect
+              </button>
+            )}
             <h1 className="font-coiny uppercase font-bold text-3xl md:text-4xl bg-gradient-to-br  from-brand-green to-brand-blue bg-clip-text text-transparent mt-3">
               {paused ? 'Paused' : isPreSale ? 'Pre-Sale' : 'Public Sale'}
             </h1>
             <h3 className="text-sm text-pink-200 tracking-widest">
-              {walletAddress
-                ? walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4)
+              {wallet?.accounts[0]?.address
+                ? wallet?.accounts[0]?.address.slice(0, 8) +
+                  '...' +
+                  wallet?.accounts[0]?.address.slice(-4)
                 : ''}
             </h3>
 
@@ -215,7 +237,7 @@ export default function Mint() {
                 </div>
 
                 {/* Mint Button && Connect Wallet Button */}
-                {walletAddress ? (
+                {wallet ? (
                   <button
                     className={` ${
                       paused || isMinting
@@ -230,7 +252,7 @@ export default function Mint() {
                 ) : (
                   <button
                     className="font-coiny mt-12 w-full bg-gradient-to-br from-brand-purple to-brand-pink shadow-lg px-6 py-3 rounded-md text-2xl text-white hover:shadow-pink-400/50 mx-4 tracking-wide uppercase"
-                    onClick={connectWalletHandler}
+                    onClick={() => connect()}
                   >
                     Connect Wallet
                   </button>

@@ -15,6 +15,47 @@
   --clr-selection-bg: #cb3d92;
   --clr-selection-text: #f4f0f0;
   --clr-background: #06070a;
+
+  /* Customize Wallet Modal */
+  /* CUSTOMIZE THE COLOR  PALLETTE */
+  --onboard-white: white;
+  --onboard-black: black;
+  --onboard-primary-1: #2f80ed;
+  --onboard-primary-100: #eff1fc;
+  --onboard-primary-200: #d0d4f7;
+  --onboard-primary-300: #b1b8f2;
+  --onboard-primary-400: #929bed;
+  --onboard-primary-500: #6370e5;
+  --onboard-primary-600: #454ea0;
+  --onboard-primary-700: #323873;
+  --onboard-gray-100: #ebebed;
+  --onboard-gray-200: #c2c4c9;
+  --onboard-gray-300: #999ca5;
+  --onboard-gray-400: #707481;
+  --onboard-gray-500: #33394b;
+  --onboard-gray-600: #242835;
+  --onboard-gray-700: #1a1d26;
+  --onboard-success-100: #d1fae3;
+  --onboard-success-200: #baf7d5;
+  --onboard-success-300: #a4f4c6;
+  --onboard-success-400: #8df2b8;
+  --onboard-success-500: #5aec99;
+  --onboard-success-600: #18ce66;
+  --onboard-success-700: #129b4d;
+  --onboard-danger-100: #ffe5e6;
+  --onboard-danger-200: #ffcccc;
+  --onboard-danger-300: #ffb3b3;
+  --onboard-danger-400: #ff8080;
+  --onboard-danger-500: #ff4f4f;
+  --onboard-danger-600: #cc0000;
+  --onboard-danger-700: #660000;
+  --onboard-warning-100: #ffefcc;
+  --onboard-warning-200: #ffe7b3;
+  --onboard-warning-300: #ffd780;
+  --onboard-warning-400: #ffc74c;
+  --onboard-warning-500: #ffaf00;
+  --onboard-warning-600: #cc8c00;
+  --onboard-warning-700: #664600;
 }
 
 html {
